@@ -56,7 +56,7 @@ void loop() {
   bool saveToFile = false, calculateDistance = false;
   char dataMode = 'N';
   buttonSave = myButtons.addButton( 0, 140, 150,  30, "Save");
-  buttonDistance = myButtons.addButton( 160, 140, 150,  30, "Distance");
+  buttonDistance = myButtons.addButton( 160, 140, 150,  30, "Move");
   myButtons.drawButtons();
   
   myGLCD.setColor(0, 255, 0);
@@ -64,9 +64,10 @@ void loop() {
 
   //Cada salto son 16 filas.
   myGLCD.setFont(BigFont);
-  myGLCD.print("Latitude:", LEFT, 0);
-  myGLCD.print("Longitude:", LEFT, 32);
-  myGLCD.print("Altitude:", LEFT, 64);
+  myGLCD.print("North:", LEFT, 0);
+  myGLCD.print("East:", LEFT, 32);
+  myGLCD.print("D.Base:", RIGHT, 32);
+  myGLCD.print("Down:", LEFT, 64);
   myGLCD.print("N. Sats:", LEFT, 96);
   myGLCD.print("Mode:", LEFT, 112);
 
@@ -132,8 +133,10 @@ void loop() {
            myGLCD.print(buffer, LEFT, 80);
            buffer = Serial.readStringUntil(',');
            myGLCD.print(buffer, 160, 96);
-           buffer = Serial.readStringUntil('&');
+           buffer = Serial.readStringUntil(',');
            myGLCD.print(buffer, 160, 112);
+           buffer = Serial.readStringUntil('&');
+           myGLCD.print(buffer, RIGHT, 48);
            
            //if (calculateDistance == true) {
               //myGLCD.print(buffer, LEFT, 191);
@@ -151,7 +154,7 @@ void loop() {
           
           buffer = Serial.readStringUntil('&');
           myGLCD.print(buffer, LEFT, 191);
-          myGLCD.print("Meters", LEFT, 207);
+          myGLCD.print("meters", RIGHT, 191); //207 is the next line
 
           Serial.write(dataMode);
           Serial.flush();
